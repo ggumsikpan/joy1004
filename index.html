@@ -216,24 +216,33 @@
     .stats {
       background: linear-gradient(135deg, var(--purple-dark), var(--purple));
       color: var(--white);
-      padding: 70px 20px;
+      padding: 80px 20px 90px;
       text-align: center;
+    }
+    .stats-title {
+      font-size: clamp(36px, 7vw, 72px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 64px;
+      letter-spacing: -0.02em;
+      text-shadow: 0 4px 24px rgba(0,0,0,0.25);
     }
     .stats-grid {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 48px;
-      max-width: 700px;
+      gap: 60px;
+      max-width: 780px;
       margin: 0 auto;
     }
     .stat-item .num {
-      font-size: clamp(36px, 7vw, 60px);
+      font-size: clamp(44px, 8vw, 72px);
       font-weight: 900;
       color: var(--purple-light);
+      line-height: 1;
     }
-    .stat-item .unit { font-size: 20px; font-weight: 700; }
-    .stat-item .desc { font-size: 14px; opacity: 0.8; margin-top: 6px; }
+    .stat-item .unit { font-size: clamp(18px, 3vw, 26px); font-weight: 700; }
+    .stat-item .desc { font-size: 15px; opacity: 0.85; margin-top: 10px; }
 
     /* ── PROFILE ── */
     .profile {
@@ -465,18 +474,18 @@
 
   <!-- STATS -->
   <section class="stats">
-    <div class="section-label" style="color: var(--purple-light); margin-bottom: 48px;">23년이 증명합니다</div>
+    <div class="stats-title">23년이<br>증명합니다</div>
     <div class="stats-grid">
       <div class="stat-item">
-        <div class="num">23<span class="unit">년</span></div>
+        <div class="num"><span class="count" data-target="23">0</span><span class="unit">년</span></div>
         <div class="desc">미라클 가족세우기 인도 경력</div>
       </div>
       <div class="stat-item">
-        <div class="num">3,300<span class="unit">회+</span></div>
+        <div class="num"><span class="count" data-target="3300">0</span><span class="unit">회+</span></div>
         <div class="desc">누적 세션 경험</div>
       </div>
       <div class="stat-item">
-        <div class="num">600<span class="unit">명+</span></div>
+        <div class="num"><span class="count" data-target="600">0</span><span class="unit">명+</span></div>
         <div class="desc">미라클 밴드 회원</div>
       </div>
     </div>
@@ -650,6 +659,35 @@
       document.body.appendChild(p);
       p.addEventListener('animationend', () => p.remove());
     }
+
+    // ── 숫자 카운트업 (Intersection Observer)
+    function animateCount(el) {
+      const target = parseInt(el.dataset.target);
+      const duration = 1800;
+      const start = performance.now();
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutExpo
+        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const value = Math.floor(ease * target);
+        el.textContent = value.toLocaleString('ko-KR');
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = target.toLocaleString('ko-KR');
+      }
+      requestAnimationFrame(update);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    document.querySelectorAll('.count').forEach(el => observer.observe(el));
 
     // ── 클릭 시 파티클 폭발
     document.addEventListener('click', (e) => {
