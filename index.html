@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>미라클 가족세우기 — 조남희 Joy1004</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple-dark:  #5C2D91;
+      --purple:       #7B3FB5;
+      --purple-mid:   #9B59CC;
+      --purple-light: #D4A8F0;
+      --purple-pale:  #F3E8FF;
+      --white:        #FFFFFF;
+      --text-dark:    #1A1A2E;
+      --text-gray:    #555577;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans KR', sans-serif; color: var(--text-dark); background: var(--white); cursor: none; }
+    a, button { cursor: none; }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 10px; height: 10px;
+      background: var(--purple);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.05s ease, background 0.2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 2px solid var(--purple-mid);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s, opacity 0.2s;
+      opacity: 0.6;
+    }
+    body:has(a:hover) #cursor-ring,
+    body:has(button:hover) #cursor-ring {
+      width: 52px; height: 52px;
+      border-color: var(--purple-light);
+      opacity: 1;
+    }
+
+    /* ── PARTICLES ── */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99997;
+      border-radius: 50%;
+      animation: particle-fade 0.9s ease-out forwards;
+    }
+    @keyframes particle-fade {
+      0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.2); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 50%, var(--purple-mid) 100%);
+      color: var(--white);
+      padding: 100px 20px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 250px; height: 250px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 50px;
+      padding: 6px 20px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 6vw, 52px);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--purple-light);
+    }
+    .hero p {
+      font-size: clamp(15px, 2.5vw, 19px);
+      line-height: 1.8;
+      opacity: 0.9;
+      max-width: 540px;
+      margin: 0 auto 40px;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--white);
+      color: var(--purple-dark);
+      font-size: 17px;
+      font-weight: 700;
+      padding: 18px 48px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .hero-sub {
+      margin-top: 20px;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    /* ── PAIN ── */
+    .pain {
+      background: var(--purple-pale);
+      padding: 80px 20px;
+      text-align: center;
+    }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--purple);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 900;
+      line-height: 1.4;
+      margin-bottom: 48px;
+    }
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .pain-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 28px 24px;
+      border-left: 4px solid var(--purple);
+      text-align: left;
+      box-shadow: 0 4px 20px rgba(123,63,181,0.08);
+    }
+    .pain-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .pain-card p { font-size: 15px; line-height: 1.7; color: var(--text-gray); }
+
+    /* ── WHAT IS ── */
+    .what {
+      padding: 90px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    @media (max-width: 700px) { .what { grid-template-columns: 1fr; gap: 40px; } }
+    .what-img img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(123,63,181,0.2);
+    }
+    .what-text .section-label { text-align: left; }
+    .what-text .section-title { text-align: left; margin-bottom: 20px; }
+    .what-text p {
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+    .what-text .highlight {
+      background: var(--purple-pale);
+      border-left: 3px solid var(--purple);
+      padding: 14px 18px;
+      border-radius: 0 10px 10px 0;
+      font-size: 15px;
+      color: var(--purple-dark);
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      color: var(--white);
+      padding: 70px 20px;
+      text-align: center;
+    }
+    .stats-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 48px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .stat-item .num {
+      font-size: clamp(36px, 7vw, 60px);
+      font-weight: 900;
+      color: var(--purple-light);
+    }
+    .stat-item .unit { font-size: 20px; font-weight: 700; }
+    .stat-item .desc { font-size: 14px; opacity: 0.8; margin-top: 6px; }
+
+    /* ── PROFILE ── */
+    .profile {
+      padding: 90px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    @media (max-width: 700px) { .profile { grid-template-columns: 1fr; gap: 40px; } }
+    .profile-photo img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(123,63,181,0.2);
+    }
+    .profile-info .section-label { text-align: left; }
+    .profile-info h2 {
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .profile-info .sub-name {
+      font-size: 15px;
+      color: var(--purple);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .profile-info .story {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+    .career-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .career-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-gray);
+    }
+    .career-list li::before {
+      content: '💜';
+      font-size: 13px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── BOOK ── */
+    .book {
+      background: var(--purple-pale);
+      padding: 90px 20px;
+    }
+    .book-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    @media (max-width: 700px) { .book-inner { grid-template-columns: 1fr; gap: 36px; } }
+    .book-cover img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 16px 48px rgba(123,63,181,0.25);
+    }
+    .book-info .section-label { text-align: left; }
+    .book-info .section-title { text-align: left; font-size: clamp(20px, 3.5vw, 30px); margin-bottom: 16px; }
+    .book-info p { font-size: 15px; line-height: 1.9; color: var(--text-gray); margin-bottom: 20px; }
+    .endorsers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .endorser-tag {
+      background: var(--white);
+      border: 1px solid var(--purple-light);
+      color: var(--purple-dark);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 50px;
+    }
+    .btn-book {
+      display: inline-block;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-book:hover { background: var(--purple-dark); transform: translateY(-2px); }
+
+    /* ── CTA ── */
+    .cta {
+      background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 60%, var(--purple-mid) 100%);
+      color: var(--white);
+      padding: 100px 20px;
+      text-align: center;
+    }
+    .cta h2 {
+      font-size: clamp(24px, 5vw, 44px);
+      font-weight: 900;
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .cta h2 em { font-style: normal; color: var(--purple-light); }
+    .cta p {
+      font-size: 16px;
+      opacity: 0.9;
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 40px;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--white);
+      color: var(--purple-dark);
+      font-size: 18px;
+      font-weight: 900;
+      padding: 20px 56px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-cta:hover { transform: translateY(-4px); box-shadow: 0 16px 50px rgba(0,0,0,0.35); }
+    .cta-note { margin-top: 20px; font-size: 13px; opacity: 0.65; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 13px;
+    }
+    footer a {
+      color: var(--purple-light);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">💜 미라클 가족세우기</div>
+    <h1>
+      가족이 회복되면<br>
+      <em>내 인생도 꽃길이 됩니다</em>
+    </h1>
+    <p>
+      23년간 3,300회 이상의 세션을 통해<br>
+      수많은 가족을 회복시킨 조남희 Joy1004의<br>
+      미라클 가족세우기에 함께하세요.
+    </p>
+    <a href="https://band.us/n/a0ad94H6Aes2Y" target="_blank" class="btn-primary">
+      💜 미라클 가족세우기 밴드 참여하기
+    </a>
+    <p class="hero-sub">추천인: 조남희 · 밴드 회원 600명+</p>
+  </section>
+
+  <!-- PAIN -->
+  <section class="pain">
+    <div class="section-label">이런 분들께</div>
+    <h2 class="section-title">
+      혹시 이런 마음이 드신 적 있으신가요?
+    </h2>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="icon">💔</div>
+        <p>가족과의 관계가 틀어졌는데 어떻게 해야 할지 모르겠어요</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">😔</div>
+        <p>부모님과 자녀 사이에서 지쳐가고 있어요</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">🌀</div>
+        <p>반복되는 가족 갈등의 패턴에서 벗어나고 싶어요</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">🌱</div>
+        <p>자아실현을 하고 싶은데 가족 문제가 발목을 잡아요</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT IS -->
+  <section style="padding: 90px 20px; background: var(--white);">
+    <div class="what">
+      <div class="what-img">
+        <img src="images/session.png" alt="미라클 가족세우기 세션 현장" />
+      </div>
+      <div class="what-text">
+        <div class="section-label">미라클 가족세우기란?</div>
+        <h2 class="section-title">가족의 얽힘을 풀고<br>진짜 나로 서는 여정</h2>
+        <p>
+          미라클 가족세우기는 세계 40여 개국에서 검증된
+          <strong>버트 헬링거의 가족세우기 심리치료</strong>를 바탕으로,
+          가족 간 대물림되는 트라우마와 갈등의 뿌리를 찾아 치유하는 프로그램입니다.
+        </p>
+        <p>
+          단순한 상담이 아닙니다.
+          가족 구성원들의 역할과 얽힘을 공간과 움직임으로 직접 체험하며,
+          깊은 내면의 치유가 일어납니다.
+        </p>
+        <div class="highlight">
+          💜 효도 · 생명 · 사랑 · 천지인(天地人)<br>
+          — 조남희 Joy1004의 가족세우기 핵심 가치
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="section-label" style="color: var(--purple-light); margin-bottom: 48px;">23년이 증명합니다</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="num">23<span class="unit">년</span></div>
+        <div class="desc">미라클 가족세우기 인도 경력</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">3,300<span class="unit">회+</span></div>
+        <div class="desc">누적 세션 경험</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">600<span class="unit">명+</span></div>
+        <div class="desc">미라클 밴드 회원</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section style="background: var(--white);">
+    <div class="profile">
+      <div class="profile-photo">
+        <img src="images/profile.jpg" alt="조남희 Joy1004" />
+      </div>
+      <div class="profile-info">
+        <div class="section-label">인도자 소개</div>
+        <h2>조남희</h2>
+        <div class="sub-name">Joy1004 · 치유상담 전문가</div>
+        <p class="story">
+          1957년생. 평범한 아내이자 엄마로 살던 그가 42세,
+          큰아들이 학교 폭력 피해자가 되는 사건을 계기로 상담 공부를 시작했습니다.
+          50세에 박사가 되고, 이후 20년간 수많은 사람들에게
+          자아실현의 행복을 전하고 있습니다.
+        </p>
+        <ul class="career-list">
+          <li>배재대학교 교수</li>
+          <li>JOY 행복상담원 원장</li>
+          <li>미라클 가족세우기 인도자 (23년)</li>
+          <li>서울신학대학교 신학박사 (목회상담학 Th.D)</li>
+          <li>세계효운동본부 대표총재</li>
+          <li>유튜브 크리에이터 《노래속 인생 Joy TV》</li>
+          <li>베스트셀러 작가 · 저서 6권</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="book">
+    <div class="book-inner">
+      <div class="book-cover">
+        <img src="images/book.jpg" alt="오늘부터 자아실현 꽃피우자!" />
+      </div>
+      <div class="book-info">
+        <div class="section-label">저서</div>
+        <h2 class="section-title">
+          오늘부터<br>자아실현 꽃피우자!
+        </h2>
+        <p>
+          태아기부터 노년기까지, 에릭슨의 생애 발달이론을 바탕으로
+          인생 각 단계별 자아실현의 길을 안내하는 가이드북.
+          "변화와 성장, 자아실현으로 꽃길만 걷으시길"
+        </p>
+        <div class="endorsers">
+          <span class="endorser-tag">정성욱 회장 추천</span>
+          <span class="endorser-tag">신화 김동완 추천</span>
+          <span class="endorser-tag">차명호 교수 추천</span>
+          <span class="endorser-tag">인플루언서 데미안 추천</span>
+        </div>
+        <a href="https://product.kyobobook.co.kr/detail/S000214304149" target="_blank" class="btn-book">
+          📖 교보문고에서 보기
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta">
+    <h2>
+      지금, <em>미라클</em>이<br>
+      당신의 가족을 기다립니다
+    </h2>
+    <p>
+      23년 경력의 조남희 Joy1004와 함께<br>
+      가족 회복의 여정을 시작하세요.<br>
+      밴드에서 다양한 정보와 모임을 만나보실 수 있습니다.
+    </p>
+    <a href="https://band.us/n/a0ad94H6Aes2Y" target="_blank" class="btn-cta">
+      💜 지금 밴드 참여하기
+    </a>
+    <p class="cta-note">추천인: 조남희 · 무료 참여 · 010-8817-5313</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 조남희 Joy1004 · 미라클 가족세우기</p>
+    <p style="margin-top: 8px;">
+      랜딩페이지 제작 · <a href="https://ggumsikman.vercel.app" target="_blank">꿈식판 꿈식맨</a>
+    </p>
+  </footer>
+
+  <!-- CURSOR ELEMENTS -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <script>
+    // ── 커서 이동
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let ringX = 0, ringY = 0;
+    let mouseX = 0, mouseY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top  = mouseY + 'px';
+      spawnParticle(mouseX, mouseY);
+    });
+
+    // 링은 약간 지연 따라오기
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // ── 클릭 시 링 튀기기
+    document.addEventListener('mousedown', () => {
+      ring.style.width  = '20px';
+      ring.style.height = '20px';
+      ring.style.opacity = '1';
+    });
+    document.addEventListener('mouseup', () => {
+      ring.style.width  = '36px';
+      ring.style.height = '36px';
+      ring.style.opacity = '0.6';
+    });
+
+    // ── 파티클 생성
+    const COLORS = ['#7B3FB5','#9B59CC','#D4A8F0','#B87FE0','#C49EEB','#E8D0FF'];
+    const SHAPES = ['💜','✦','·','⋆','✿','❋'];
+    let lastSpawn = 0;
+
+    function spawnParticle(x, y) {
+      const now = Date.now();
+      if (now - lastSpawn < 30) return; // 30ms 간격 제한
+      lastSpawn = now;
+
+      const useEmoji = Math.random() < 0.3;
+      const p = document.createElement('div');
+      p.classList.add('particle');
+
+      const size  = Math.random() * 8 + 4;
+      const dx    = (Math.random() - 0.5) * 60;
+      const dy    = -(Math.random() * 50 + 20);
+      const dur   = Math.random() * 0.5 + 0.6;
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+
+      if (useEmoji) {
+        p.style.cssText = `
+          left:${x}px; top:${y}px;
+          font-size:${size + 6}px;
+          --dx:${dx}px; --dy:${dy}px;
+          animation-duration:${dur}s;
+          background: transparent;
+          border-radius: 0;
+        `;
+        p.textContent = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+      } else {
+        p.style.cssText = `
+          left:${x}px; top:${y}px;
+          width:${size}px; height:${size}px;
+          background:${color};
+          --dx:${dx}px; --dy:${dy}px;
+          animation-duration:${dur}s;
+          opacity:0.8;
+        `;
+      }
+
+      document.body.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+
+    // ── 클릭 시 파티클 폭발
+    document.addEventListener('click', (e) => {
+      for (let i = 0; i < 12; i++) {
+        setTimeout(() => spawnParticleBurst(e.clientX, e.clientY), i * 20);
+      }
+    });
+
+    function spawnParticleBurst(x, y) {
+      const p = document.createElement('div');
+      p.classList.add('particle');
+      const angle = Math.random() * Math.PI * 2;
+      const dist  = Math.random() * 60 + 20;
+      const dx    = Math.cos(angle) * dist;
+      const dy    = Math.sin(angle) * dist;
+      const size  = Math.random() * 10 + 5;
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      p.style.cssText = `
+        left:${x}px; top:${y}px;
+        width:${size}px; height:${size}px;
+        background:${color};
+        --dx:${dx}px; --dy:${dy}px;
+        animation-duration:${Math.random()*0.4+0.5}s;
+        opacity:0.9;
+      `;
+      document.body.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+  </script>
+
+</body>
+</html>
